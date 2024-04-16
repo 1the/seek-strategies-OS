@@ -39,8 +39,8 @@ def update_plot(sequence):
 # Function to handle algorithm selection
 def run_algorithm():
     algorithm = algorithm_var.get()
-    direction = direction_var.get()
-    tracks = int(tracks_entry.get())
+    direction = direction_var.get() if algorithm != "FCFS" and algorithm != "SSTF" else None
+    tracks = int(tracks_entry.get())  if algorithm != "FCFS" and algorithm != "SSTF" else None
 
     requests = list(map(int, requests_entry.get().split(',')))
     # handling empty requests
@@ -50,8 +50,9 @@ def run_algorithm():
     # handling the head position errors
     try:
         head_position = int(head_entry.get())
-        if head_position < 0 or head_position >= tracks:
-            raise ValueError
+        if algorithm != "FCFS" and algorithm != "SSTF":
+            if head_position < 0 or head_position >= tracks:
+                raise ValueError
 
     except ValueError:
       messagebox.showerror("Error", "Please enter a valid head position.")
@@ -82,6 +83,19 @@ def run_algorithm():
 
     update_plot(sequence)
 
+# to specify when to display direction and total tracks
+def update_algorithm_selection(algorithm):
+    if algorithm != "FCFS" and algorithm != "SSTF":
+        direction_label.grid(row=2, column=0, sticky="E")
+        direction_menu.grid(row=2, column=1, padx=10)
+        tracks_label.grid(row=4, column=0, sticky="E")
+        tracks_entry.grid(row=4, column=1, padx=10)
+    else:
+        direction_label.grid_forget()
+        direction_menu.grid_forget()
+        tracks_label.grid_forget()
+        tracks_entry.grid_forget()
+
 # Create the main window
 window = tk.Tk()
 window.title("Disk Scheduling Algorithms")
@@ -106,7 +120,7 @@ algorithm_label.grid(row=0, column=0, sticky="E")
 algorithm_var = tk.StringVar(input_frame)
 algorithm_var.set("FCFS")
 
-algorithm_menu = tk.OptionMenu(input_frame, algorithm_var, "FCFS","SSTF" , "SCAN", "LOOK" , "C-SCAN" , "C-LOOK")
+algorithm_menu = tk.OptionMenu(input_frame, algorithm_var, "FCFS","SSTF" , "SCAN", "LOOK" , "C-SCAN" , "C-LOOK", command=update_algorithm_selection)
 algorithm_menu.grid(row=0, column=1, padx=10)
 
 # Head position
@@ -118,13 +132,13 @@ head_entry.grid(row=1, column=1, padx=10)
 
 # Head direction
 direction_label = tk.Label(input_frame, text="Direction:")
-direction_label.grid(row=2, column=0, sticky="E")
+#direction_label.grid(row=2, column=0, sticky="E")
 
 direction_var = tk.StringVar(input_frame)
 direction_var.set("Inward")
 
 direction_menu = tk.OptionMenu(input_frame, direction_var, "Inward", "Outward")
-direction_menu.grid(row=2, column=1, padx=10)
+#direction_menu.grid(row=2, column=1, padx=10)
 
 # Requests
 requests_label = tk.Label(input_frame, text="Requests (comma-separated):")
@@ -135,10 +149,10 @@ requests_entry.grid(row=3, column=1, padx=10)
 
 # Number of tracks
 tracks_label = tk.Label(input_frame, text="Number of Tracks:")
-tracks_label.grid(row=4, column=0, sticky="E")
+#tracks_label.grid(row=4, column=0, sticky="E")
 
 tracks_entry = tk.Entry(input_frame)
-tracks_entry.grid(row=4, column=1, padx=10)
+#tracks_entry.grid(row=4, column=1, padx=10)
 
 # Button to run the algorithm
 run_button = tk.Button(input_frame, text="Run Algorithm", command=run_algorithm)

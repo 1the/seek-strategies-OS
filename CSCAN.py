@@ -45,6 +45,6 @@ def cscan_algorithm(head_position, direction, tracks, requests):
     for i in range(len(sequence) - 1):
         total_tracks += abs(sequence[i] - sequence[i + 1])
     # Calculate the average traveled tracks
-    average_tracks = total_tracks / len(requests)
+    average_tracks = total_tracks / (len(requests)-1)
 
     return sequence, total_tracks, average_tracks

@@ -13,6 +13,6 @@ def fcfs_algorithm(head_position, requests):
         total_tracks += difference
         sequence.append(request)
         current_position = request
-    average_tracks = total_tracks / len(requests)
+    average_tracks = total_tracks / (len(requests)-1)
 
     return sequence, total_tracks, average_tracks
